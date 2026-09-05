@@ -11,7 +11,7 @@ public class DiscordLogMod implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     // 🔥 WEBHOOK CỦA BẠN
-    public static final String WEBHOOK_URL = "https://discord.com/api/webhooks/1545822001866997883/wji2mNdEPxgekbbpB7IPnsN2JLPZbmSOVo-JnEiOrupVcHmil-5ZWzYBl9mj1DA4Re0l";
+    public static final String WEBHOOK_URL = "https://discord.com/api/webhooks/1545859821562237130/MoyyGG_f3bIzGGLsxcTtgTgKi86iMSLJyHKutGwlnL1mHvdSXz7gsf5moMvfptnrA1k5";
 
     public static DiscordWebhook webhook;
 

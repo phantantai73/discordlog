@@ -5,6 +5,7 @@
   "name": "Discord Log Mod",
   "description": "Gui log server len Discord qua Webhook",
   "authors": ["sadfum"],
+  "icon": "assets/discordlog/icon.png",
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
