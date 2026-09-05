@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "discordlog",
+  "version": "1.0.0",
+  "name": "Discord Log Mod",
+  "description": "Gui log server len Discord qua Webhook",
+  "authors": ["Phan Tan Tai"],
+  "contact": {
+    "homepage": "https://github.com/phantantai73/discordlog"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.phantantai.discordlog.DiscordLogMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "minecraft": "1.21.11",
+    "java": ">=21"
+  }
+}
