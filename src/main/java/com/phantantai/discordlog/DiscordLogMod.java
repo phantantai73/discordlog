@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 public class DiscordLogMod implements ModInitializer {
     public static final String MOD_ID = "discordlog";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    
-    // 🔥 WEBHOOK CỦA BẠN ĐÃ ĐƯỢC GẮN CỨNG Ở ĐÂY!
+
+    // 🔥 WEBHOOK CỦA BẠN
     public static final String WEBHOOK_URL = "https://discord.com/api/webhooks/1545822001866997883/wji2mNdEPxgekbbpB7IPnsN2JLPZbmSOVo-JnEiOrupVcHmil-5ZWzYBl9mj1DA4Re0l";
-    
+
     public static DiscordWebhook webhook;
 
     @Override
