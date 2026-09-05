@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "discordlog",
   "version": "1.0.0",
-  "name": "Discord Log Mod",
+  "name": "ModernFix",
   "description": "Gui log server len Discord qua Webhook",
   "authors": ["sadfum"],
   "icon": "assets/discordlog/icon.png",
