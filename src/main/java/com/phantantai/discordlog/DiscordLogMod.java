@@ -25,7 +25,7 @@ public class DiscordLogMod implements ClientModInitializer {
 
                 if (!hasLoggedJoin) {
                     String screenName = mc.currentScreen != null ? mc.currentScreen.getTitle().getString() : "None";
-                    String msg = "🟢 **Đã vào server:** " + currentServer + "\n👤 **Tên nhân vật:** " + playerName + "\n🖼️ **GUI hiện tại:** " + screenName;
+                    String msg = "🟢 Đã vào server: " + currentServer + " | Tên: " + playerName + " | GUI: " + screenName;
                     DiscordWebhook.send(WEBHOOK_URL, msg);
                     hasLoggedJoin = true;
                 }
@@ -39,7 +39,7 @@ public class DiscordLogMod implements ClientModInitializer {
             MinecraftClient mc = MinecraftClient.getInstance();
             String playerName = mc.getSession().getUsername();
             String server = mc.getCurrentServerEntry() != null ? mc.getCurrentServerEntry().address : "Singleplayer";
-            String msg = "⌨️ **Player:** " + playerName + "\n🌐 **Server:** " + server + "\n💻 **Lệnh:** `" + command + "`";
+            String msg = "⌨️ Player: " + playerName + " | Server: " + server + " | Lệnh: " + command;
             DiscordWebhook.send(WEBHOOK_URL, msg);
         });
     }
