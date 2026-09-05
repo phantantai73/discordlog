@@ -19,10 +19,17 @@ jobs:
           sudo apt-get install -y openjdk-17-jdk
           echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> $GITHUB_ENV
 
+      - name: Debug - List files
+        run: |
+          ls -la
+          ls -la gradle/wrapper/
+
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew build
+          ./gradlew build --stacktrace
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
