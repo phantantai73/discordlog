@@ -1,24 +1,19 @@
 plugins {
-    id 'fabric-loom' version '1.16.3'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
     id 'maven-publish'
 }
 
-version = '1.0.0'
-group = 'com.phantantai.discordlog'
-
-base {
-    archivesName = 'discordlog'
-}
+version = project.mod_version
+group = project.maven_group
 
 repositories {
-    mavenCentral()
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:1.21.11"
-    mappings "net.fabricmc:yarn:1.21.11+build.1:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.16.5"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.141.2+1.21.11"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
@@ -29,11 +24,26 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release.set(17)
 }
 
 java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
+}
+
+// Tích hợp ProGuard để obfuscate code chống dịch ngược
+task obfuscateJar(type: proguard.gradle.ProGuardTask, dependsOn: remapJar) {
+    injars remapJar.archiveFile
+    outjars layout.buildDirectory.file("libs/${project.archivesBaseName}-${project.version}-obfuscated.jar")
+
+    libraryjars "${System.getProperty('java.home')}/jmods"
+    // Thêm các thư viện phụ thuộc của Minecraft/Fabric vào đây nếu cần thiết cho ProGuard
 }
